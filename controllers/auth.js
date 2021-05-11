@@ -6,12 +6,23 @@ module.exports = {
             res.send("passwords dont match");
         }
         else{
+            //TO DO data doesn't return what it should check it out
             authService.register(req.body.email, req.body.password, req.body.username, req.body.token).then((data) => {
+                console.log("log ctrl:" + data);
                 res.send(data);
             }).catch((err) => {
                 res.send(err.message);
             })
 
         }
+    },
+    login: (req, res) => {
+        authService.login(req.body.email, req.body.password).then((data) => {
+            res.send(data);
+        }).catch((err) => {
+            res.send(err.message);
+        })
     }
+
+
 };
