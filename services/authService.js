@@ -3,9 +3,14 @@ const mongoose = require('mongoose');
 const dbURI = 'mongodb+srv://readWrite:rKsnW2pPLafbHHz@nodeloraapp.rguzt.mongodb.net/diplomskiRadJelenic?retryWrites=true&w=majority';
 const User = require('../models/user');
 
+const jwt = require('jsonwebtoken');
+
+
+//const testKey = ;
+
 //TO DO: consider connecting to database from a separate file and export the connection
 
-/*
+/*async function insted of promise
 module.exports = {
     register: async function(email, password, username, token){
         try{
@@ -137,20 +142,46 @@ module.exports = {
             console.log(e);
         }
     },
-    login: async function(email, password){
-        mongoose.connect(dbURI, 
-            { useNewUrlParser: true, useUnifiedTopology: true }, 
-            async function(err, db){
-                const user = await User.findOne({email: email}).catch((err) => console.log(err));
-                if (bcrypt.compare(password, user.password)){
-                    //generate jwt
-                    console.log('generating jwt');
-                    return ({msg: 'generating jwt'});
-                }
-                else{
-                    console.log('passwords dont match');
-                    return ({msg: 'passwords dont match'});
-                }
+    login: function(email, password){
+        return new Promise((resolve, reject) => {
+            mongoose.connect(dbURI, 
+                { useNewUrlParser: true, useUnifiedTopology: true }, 
+                async function(err, db){
+                    const user = await User.findOne({email: email}).catch((err) => console.log(err));
+                    if (bcrypt.compare(password, user.password)){
+                        //generate jwt
+                        console.log('generating jwt');
+                        let accessToken = generateAccesToken({token: user.token})
+                        resolve ({accessToken: accessToken});
+                        //return ({msg: 'generating jwt'});
+                    }
+                    else{
+                        console.log('passwords dont match');
+                        resolve ('passwords dont match');
+                        //return ({msg: 'passwords dont match'});
+                    }
+            })
+        })
+    },
+    authenticateToken: function(req, res, next){
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+        if (token == null){
+            return 401;
+        }
+
+        jwt.verify(token, 'nestostabitrebaocitkljuc', (err,user) => {
+            if (err){
+                return 403;
+            }
+            else{
+                req.user = user;
+                next();
+            }
         })
     }
+}
+
+function generateAccesToken(token){
+    return jwt.sign(token, 'nestostabitrebaocitkljuc'/*, {expiresIn: '3600s', algorithm: 'RS256'}*/);
 }
