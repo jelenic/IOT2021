@@ -1,6 +1,6 @@
 const express = require('express');
 const webSocket = require('ws');
-const UplinkMessage = require('../MainApp/models/uplinkMessage');//ako ce runnat na odvojenom kontejneru treba ovaj model kopirat
+const UplinkMessage = require('./models/uplinkMessage');//ako ce runnat na odvojenom kontejneru treba ovaj model kopirat
 const os = require('os');
 const mongoose = require('mongoose');
 
