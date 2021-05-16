@@ -30,9 +30,8 @@ module.exports = {
 }*/
 
 module.exports = {
-    /*register: function(email, password, username, token){
+    register: function(email, password, username, token){
         try{
-            const hashPassword = hashPassword(password);
             return new Promise((resolve, reject) => {
     
                 mongoose.connect(dbURI,
@@ -63,13 +62,14 @@ module.exports = {
                         //return 422;
                     }
                     else{
+                        //const hashPassword = await hashPassword(password);
                         const userM = new User({
                             username: username,
                             email: email,
-                            password: hashPassword,
+                            password: password,
                             token: token
                         })
-                        console.log(hashPassword);
+                        //console.log(hashPassword);
                         userM.save()
                             .then((result) => {
                                 console.log('save:' + result);
@@ -91,8 +91,8 @@ module.exports = {
         catch (e){
             console.log(e);
         }
-    },*/
-    register: async function(email, password, username, token){
+    },
+    /*register: async function(email, password, username, token){
         try{
             const hashPassword = await bcrypt.hash(password, 10);
     
@@ -136,7 +136,7 @@ module.exports = {
         catch (e){
             console.log(e);
         }
-    },
+    },*/
     login: function(email, password){
         return new Promise((resolve, reject) => {
             mongoose.connect(dbURI, 
@@ -174,6 +174,16 @@ module.exports = {
                 next();
             }
         })
+    },
+    hashPassword: async function(password){
+        const hashedPassword = await new Promise((resolve, reject) => {
+            bcrypt.hash(password, 10, function(err, hash) {
+              if (err) reject(err)
+              resolve(hash)
+            });
+          })
+        
+          return hashedPassword
     }
 }
 
@@ -181,7 +191,7 @@ function generateAccesToken(token){
     return jwt.sign(token, 'nestostabitrebaocitkljuc'/*, {expiresIn: '3600s', algorithm: 'RS256'}*/);
 }
 
-async function hashPassword(password){
+/*async function hashPassword(password){
   
     const hashedPassword = await new Promise((resolve, reject) => {
       bcrypt.hash(password, 10, function(err, hash) {
@@ -191,4 +201,4 @@ async function hashPassword(password){
     })
   
     return hashedPassword
-}
+}*/
