@@ -3,6 +3,7 @@ const webSocket = require('ws');
 const UplinkMessage = require('./models/uplinkMessage');//ako ce runnat na odvojenom kontejneru treba ovaj model kopirat
 const os = require('os');
 const mongoose = require('mongoose');
+const elsysDataDecoder = require('./services/elsysDataDecoder');
 
 const port = /*process.env.SERVER_PORT ||*/ 3000;
 const dbURI = 'mongodb+srv://readWrite:rKsnW2pPLafbHHz@nodeloraapp.rguzt.mongodb.net/diplomskiRadJelenic?retryWrites=true&w=majority';
@@ -61,7 +62,9 @@ app.get('/', function (req, res) {
                 splitData = e.data.split(os.EOL);
                 splitData.forEach(element => {
                     json = JSON.parse(element);
-                    if (typeof json['data']!=="undefined" && json['cmd']==="rx"){
+                    if ((typeof json['data']!=="undefined" || json['data']!=="efff") && json['cmd']==="rx"){
+                        //const msg = {msg:json['data']}
+                        const msg = elsysDataDecoder.decode(elsysDataDecoder.hexToBytes(json['data']));
                         const uplinkMessageM = new UplinkMessage({
                             cmd: json['cmd'],
                             EUI: json['EUI'],
@@ -70,7 +73,7 @@ app.get('/', function (req, res) {
                             fcnt: json['fcnt'],
                             port: json['port'],
                             ack: json['ack'],
-                            data: json['data']
+                            data: msg
                         })
                         uplinkMessageM.save()
                         .then((result) => {
