@@ -10,9 +10,9 @@ module.exports = {
             authService.hashPassword(req.body.password).then((result) => {
                 authService.register(req.body.email, result, req.body.username, req.body.token).then((data) => {
                     console.log("log ctrl:" + data);
-                    res.send(data);
+                    res.json({data : data});
                 }).catch((err) => {
-                    res.send(err.message);
+                    res.json({err : err.message});
                 })
             });
             /*authService.register(req.body.email, password, req.body.username, req.body.token).then((data) => {
@@ -26,9 +26,9 @@ module.exports = {
     },
     login: (req, res) => {
         authService.login(req.body.email, req.body.password).then((data) => {
-            res.send(data);
+            res.json({data : data});
         }).catch((err) => {
-            res.send(err.message);
+            res.json({err : err.message});
         })
     }
 
