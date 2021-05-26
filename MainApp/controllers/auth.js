@@ -26,6 +26,7 @@ module.exports = {
     },
     login: (req, res) => {
         authService.login(req.body.email, req.body.password).then((data) => {
+            console.log("log ctrl:" + data);
             res.json({data : data});
         }).catch((err) => {
             res.json({err : err.message});

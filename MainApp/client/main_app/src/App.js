@@ -1,4 +1,4 @@
-import { Login, Register } from './components';
+import { Login, Register, Display } from './components';
 
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
@@ -13,6 +13,9 @@ function App() {
             </Route>
             <Route path="/register">
               <Register />
+            </Route>
+            <Route path="/display">
+              <Display />
             </Route>
         </Switch>
     </BrowserRouter>

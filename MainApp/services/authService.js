@@ -73,7 +73,10 @@ module.exports = {
                         userM.save()
                             .then((result) => {
                                 console.log('save:' + result);
-                                resolve(result)
+                                //resolve(result)
+                                console.log('generating jwt');
+                                let accessToken = generateAccesToken({token: userM.token})
+                                resolve ({accessToken: accessToken});
                                 //return (result);
                             }).catch((err) => {
                                 console.log(err)

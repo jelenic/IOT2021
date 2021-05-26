@@ -9,7 +9,9 @@ export class Register extends React.Component {
         super(props);
         this.state = {
             email: "",
-            password: ""
+            password: "",
+            username: "",
+            cpassword: ""
         }
     }
 
@@ -68,19 +70,20 @@ export class Register extends React.Component {
 
     onSubmit = event => {
         event.preventDefault();
-        const { email, password, cpassword, username } = this.state;
+        this.state.token = "token";
+        const { email, password, cpassword, username, token } = this.state;
 
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password, cpassword, username })
+            body: JSON.stringify({ email, password, cpassword, username, token })
         };
 
         fetch("http://localhost:4000/api/auth/register", requestOptions)
             .then(res => res.json())
             .then(res => {
-                localStorage.setItem("currentUser", res.token);
-                window.location.assign("/test");
+                localStorage.setItem("JWT", res.data.accessToken);
+                window.location.assign("/display");
             })
             .catch();
     }

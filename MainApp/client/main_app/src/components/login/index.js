@@ -65,8 +65,8 @@ export class Login extends React.Component {
         fetch("http://localhost:4000/api/auth/login", requestOptions)
             .then(res => res.json())
             .then(res => {
-                localStorage.setItem("currentUser", res.token);
-                window.location.assign("/test");
+                localStorage.setItem("JWT", res.data.accessToken);
+                window.location.assign('/display');
             })
             .catch();
     }
