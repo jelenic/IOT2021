@@ -9,8 +9,11 @@ const sensor = new Schema({
         type: String
     },//type of encryption of data
     user:{
+        type:Object
+    },//user to whom sensor belongs
+    desc:{
         type:String
-    }//user to whom sensor belongs
+    }//description of a device
 })
 
 const Sensor = mongoose.model('Sensor', sensor);

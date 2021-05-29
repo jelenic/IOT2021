@@ -1,6 +1,7 @@
 const express = require('express');
 const webSocket = require('ws');
-const UplinkMessage = require('./models/uplinkMessage');//ako ce runnat na odvojenom kontejneru treba ovaj model kopirat
+const UplinkMessage = require('./models/uplinkMessage');
+const Sensor = require('./models/sensor')
 const os = require('os');
 const mongoose = require('mongoose');
 const elsysDataDecoder = require('./services/elsysDataDecoder');
@@ -56,15 +57,79 @@ app.get('/', function (req, res) {
     connection.onmessage = e => {
         console.log("Received data:");
         console.log(e.data);
+        console.log("----------------------");
+        const jdata = JSON.parse(e.data);
+        //console.log(jdata.EUI);
         mongoose.connect(dbURI, 
         { useNewUrlParser: true, useUnifiedTopology: true }, 
         async function(err, db){
-                splitData = e.data.split(os.EOL);
+            const existingSensor = await Sensor.findOne({EUI: jdata.EUI}).then((result) => {
+                //console.log('existing EUI:' + result);
+                console.log('existingSensor query over')
+                //resolve(result);
+                return (result);
+            }).catch((err) => {
+                console.log(err)
+                reject(err);
+            });
+            if ((typeof jdata.data!=="undefined" || jdata.data!=="efff") && jdata.cmd==="rx"){
+                /*const uplinkMessageM = new UplinkMessage({
+                    cmd: jdata.cmd,
+                    EUI: jdata.EUI,
+                    ts: jdata.ts,
+                    bat: jdata.bat,
+                    fcnt: jdata.fcnt,
+                    port: jdata.port,
+                    ack: jdata.ack,
+                    data: jdata.data
+                })
+                uplinkMessageM.save()
+                .then((result) => {
+                    console.log('saved measurement to db uplinkMessage:' + result);
+                }).catch((err) => {
+                    console.log(uplinkMessageM);
+                    console.log('something went wrong uplinkMessage');
+                    console.log(err);
+                });*/
+                if (existingSensor == null){
+                    console.log('sensor does not exist' )
+                }
+                else{
+                    console.log('type:' + existingSensor.type);
+                    let msg = "";
+                    if (existingSensor.type == 'elsys'){
+                        msg = elsysDataDecoder.decode(elsysDataDecoder.hexToBytes(jdata.data));
+                    }
+                    else{
+                        msg =jdata.data
+                    }
+                    let uplinkMessage2M = new UplinkMessage({
+                        cmd: jdata.cmd,
+                        EUI: jdata.EUI,
+                        ts: jdata.ts,
+                        bat: jdata.bat,
+                        fcnt: jdata.fcnt,
+                        port: jdata.port,
+                        ack: jdata.ack,
+                        data: msg
+                    })
+                    uplinkMessage2M.save()
+                    .then((result) => {
+                        console.log('saved measurement to db EUI collection:' + result);
+                        mongoose.connection.close();
+                    }).catch((err) => {
+                        console.log(uplinkMessage2M);
+                        console.log('something went wrong uplinkMessage2M');
+                        console.log(err);
+                        mongoose.connection.close();
+                    });
+                }
+            }
+            /*    splitData = e.data.split(os.EOL);
                 splitData.forEach(element => {
                     json = JSON.parse(element);
                     if ((typeof json['data']!=="undefined" || json['data']!=="efff") && json['cmd']==="rx"){
                         //const msg = {msg:json['data']}
-                        const msg = elsysDataDecoder.decode(elsysDataDecoder.hexToBytes(json['data']));
                         const uplinkMessageM = new UplinkMessage({
                             cmd: json['cmd'],
                             EUI: json['EUI'],
@@ -73,20 +138,52 @@ app.get('/', function (req, res) {
                             fcnt: json['fcnt'],
                             port: json['port'],
                             ack: json['ack'],
-                            data: msg
+                            data: json['data']
                         })
                         uplinkMessageM.save()
                         .then((result) => {
                             console.log('saved measurement to db:' + result);
-                            mongoose.connection.close();
+                            //mongoose.connection.close();
                         }).catch((err) => {
                             console.log(uplinkMessageM);
                             console.log('something went wrong');
                             console.log(err);
-                            mongoose.connection.close();
+                            //mongoose.connection.close();
                         });
+                        if (existingSensor == null){
+                            console.log('sensor does not exist' )
+                        }
+                        else{
+                            console.log('type:' + existingSensor.type);
+                            if (exsistingSensor.type == 'elsys'){
+                                const msg = elsysDataDecoder.decode(elsysDataDecoder.hexToBytes(json['data']));
+                            }
+                            else{
+                                msg = 'default'
+                            }
+                            const uplinkMessage2M = new UplinkMessage({
+                                cmd: json['cmd'],
+                                EUI: json['EUI'],
+                                ts: json['ts'],
+                                bat: json['bat'],
+                                fcnt: json['fcnt'],
+                                port: json['port'],
+                                ack: json['ack'],
+                                data: msg
+                            },{collection : json['EUI']})
+                            uplinkMessage2M.save()
+                            .then((result) => {
+                                console.log('saved measurement to db:' + result);
+                                mongoose.connection.close();
+                            }).catch((err) => {
+                                console.log(uplinkMessageM);
+                                console.log('something went wrong');
+                                console.log(err);
+                                mongoose.connection.close();
+                            });
+                        }
                     }
-                })
+                })*/
                 
         })
         

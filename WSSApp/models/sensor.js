@@ -7,7 +7,13 @@ const sensor = new Schema({
     },//device EUI
     type:{
         type: String
-    }
+    },//type of encryption of data
+    user:{
+        type:Object
+    },//user to whom sensor belongs
+    desc:{
+        type:String
+    }//description of a device
 })
 
 const Sensor = mongoose.model('Sensor', sensor);

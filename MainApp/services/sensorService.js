@@ -4,7 +4,7 @@ const Sensor = require('../models/sensor');
 const User = require('../models/user');
 
 module.exports = {
-    addSensor: function(EUI, type, email){
+    addSensor: function(EUI, type, email, desc){
         try{
             return new Promise((resolve, reject) => {
                 mongoose.connect(dbURI,
@@ -13,7 +13,7 @@ module.exports = {
                         let existingSensor = await Sensor.findOne({EUI: EUI}).then((result) => {
                             console.log('existing EUI:' + result);
                             //resolve(result);
-                            //return (result);
+                            return (result);
                         }).catch((err) => {
                             console.log(err)
                             reject(err);
@@ -38,7 +38,8 @@ module.exports = {
                             const sensorM = new Sensor({
                                 EUI: EUI,
                                 type: type,
-                                user: user
+                                user: user,
+                                desc: desc
                             });
                             sensorM.save()
                             .then((result) => {
