@@ -5,10 +5,13 @@ const Sensor = require('./models/sensor')
 const os = require('os');
 const mongoose = require('mongoose');
 const elsysDataDecoder = require('./services/elsysDataDecoder');
+const oxobuttonDecoder = require('./services/oxobuttonDecoder');
 
 const port = /*process.env.SERVER_PORT ||*/ 3000;
 const dbURI = 'mongodb+srv://readWrite:rKsnW2pPLafbHHz@nodeloraapp.rguzt.mongodb.net/diplomskiRadJelenic?retryWrites=true&w=majority';
 const wsURL = 'wss://eu1.loriot.io/app?token=vnoh3wAAAA1ldTEubG9yaW90LmlvCoH9Jt8pL4NSI5MpfkWUjQ==';
+
+// http://oxobutton.ch/products/oxobutton-lorawan/documentation decoder for oxobutton
 
 const app = express();
 app.listen(port, () => {
@@ -18,6 +21,11 @@ app.listen(port, () => {
 })
 
 app.get('/', function (req, res) {
+    /*console.log('data')
+    console.log('3008000000006419015afed513e7')
+    msg = oxobuttonDecoder.Decoder(oxobuttonDecoder.hexToBytes('3008000000006419015afed513e7'));
+    console.log('msg')
+    console.log(msg)*/
     /*mongoose.connect(dbURI, 
         { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }, 
         async function(err, db){
@@ -65,7 +73,7 @@ app.get('/', function (req, res) {
         async function(err, db){
             const existingSensor = await Sensor.findOne({EUI: jdata.EUI}).then((result) => {
                 //console.log('existing EUI:' + result);
-                console.log('existingSensor query over')
+                //console.log('existingSensor query over')
                 //resolve(result);
                 return (result);
             }).catch((err) => {
@@ -99,6 +107,13 @@ app.get('/', function (req, res) {
                     let msg = "";
                     if (existingSensor.type == 'elsys'){
                         msg = elsysDataDecoder.decode(elsysDataDecoder.hexToBytes(jdata.data));
+                    }
+                    else if(existingSensor.type == 'oxobutton'){
+                        console.log('data')
+                        console.log(jdata.data);
+                        msg = oxobuttonDecoder.Decoder(oxobuttonDecoder.hexToBytes(jdata.data));
+                        console.log('msg')
+                        console.log(msg)
                     }
                     else{
                         msg =jdata.data
