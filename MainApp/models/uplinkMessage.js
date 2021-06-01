@@ -24,7 +24,7 @@ const uplinkMessage = new Schema({
         type: Number
     },//port as sent by the end device
     data:{
-        type: String
+        type: Object
     }//data payload
 })
 
