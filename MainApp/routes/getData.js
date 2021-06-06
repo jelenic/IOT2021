@@ -10,5 +10,7 @@ router.route('/').get((req,res)=>{
 
 router.get('/EUI/:EUI', getDataCtrl.returnAllMessagesWithEUI);
 
+router.post('/downlink', getDataCtrl.sendDownlinkMessage);
+
 
 module.exports = router;

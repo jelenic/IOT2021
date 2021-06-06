@@ -131,12 +131,12 @@ app.get('/', function (req, res) {
                     uplinkMessage2M.save()
                     .then((result) => {
                         console.log('saved measurement to db EUI collection:' + result);
-                        mongoose.connection.close();
+                        //mongoose.connection.close();
                     }).catch((err) => {
                         console.log(uplinkMessage2M);
                         console.log('something went wrong uplinkMessage2M');
                         console.log(err);
-                        mongoose.connection.close();
+                        //mongoose.connection.close();
                     });
                 }
             }

@@ -1,4 +1,4 @@
-var lora_params = false
+/*var lora_params = false
 var lora_adr = true                 // ADR enable/disable
 var lora_dr = 2                     // 0... 5
 var lora_send_trials = 3            // 1... 10
@@ -16,11 +16,11 @@ var periphery_leds_enable = 0x0F    // LED EN bits: 0b0000'1111
 var periphery_accel_mode = 0        // 0... 6
 var periphery_show_hourglass = true
 
-var image_params = false
+var image_params = true
 var image_epd_mode = 1              // 0 = show all in the memory, 1 = show selected, 2 = toggle selected
 var image_codes = [0x001D, 0x001E, 0x001F]
 
-var user_text_params = true
+var user_text_params = false
 var user_text_x_pos = 8             // 0... 199
 var user_text_y_pos = 8             // 0... 199
 var user_text_font_size = 24        // 8, 12, 16, 20, 24
@@ -101,7 +101,7 @@ if (periphery_params){
     console.log("generating periphery message for oxobutton");
     downlink_message += "B1"
     if (periphery_piezo_mode < 0 || periphery_piezo_mode > 15){
-        console.log("invalid interval");
+        console.log("invalid periphery_piezo_mode");
     }
     else{
         //donwlink_message += "0"
@@ -109,7 +109,7 @@ if (periphery_params){
     }
 
     if (periphery_piezo_freq1 < 0 || periphery_piezo_freq1 > 3 || periphery_piezo_freq2 < 0 || periphery_piezo_freq2 > 3){
-        console.log("invalid interval");
+        console.log("invalid interval freq");
     }
     else{
         periphery_piezo_freq = (periphery_piezo_freq2 << 2) | periphery_piezo_freq1
@@ -119,7 +119,7 @@ if (periphery_params){
     downlink_message += "00"
 
     if (periphery_leds_enable < 0 || periphery_leds_enable > 0x0F){
-        console.log("invalid interval");
+        console.log("invalid periphery_leds_enable");
     }
     else{
         //donwlink_message += "0"
@@ -127,7 +127,7 @@ if (periphery_params){
     }
 
     if (periphery_accel_mode < 0 || periphery_accel_mode > 6){
-        console.log("invalid interval");
+        console.log("invalid periphery_accel_mode");
     }
     else{
         //donwlink_message += "0"
@@ -158,7 +158,13 @@ if (image_params){
 
     if (image_epd_mode != 0){
         downlink_message += pad_with_zeroes(2,image_codes.length.toString(16));
+        console.log("imagescodes")
+        console.log(image_codes);
         image_codes.forEach(function(item, index, array) {
+            console.log("----------item------------");
+            console.log(item);
+            console.log(item.toString(16));
+            console.log("----------item------------");
             downlink_message += pad_with_zeroes(4,item.toString(16));
         })
     }
@@ -167,7 +173,7 @@ if (image_params){
 }
 
 if (user_text_params){
-    console.log("generating periphery message for oxobutton");
+    console.log("generating text message for oxobutton");
     downlink_message += "B3";
     if (user_text_x_pos < 0 || user_text_x_pos > 199){
         console.log("invalid x position");
@@ -207,7 +213,7 @@ if (user_text_params){
     }
     console.log(downlink_message);
 
-}
+}*/
 
 
 function pad_with_zeroes(length, str) {
@@ -222,20 +228,85 @@ function pad_with_zeroes(length, str) {
 }
 
 module.exports = {
-    ConfigureLoRaParameters: function(){
+    ConfigureLoRaParameters: function(lora_dr=2, lora_send_trials = 3, lora_join_trials = 1, lora_port = 1, lora_cnf = True, lora_heartbeat = 48, lora_interval = 7){
         var downlink_message = "";
         return downlink_message;
     },
-    ConfigurePeripheryDownlinkMessageBytes: function(){
+    ConfigurePeripheryDownlinkMessageBytes: function(periphery_piezo_mode = 2, periphery_piezo_freq1=1, periphery_piezo_freq2 = 2, periphery_leds_enable = 0x0F, periphery_accel_mode = 0, periphery_show_hourglass = 0){
         var downlink_message = "";
         return downlink_message;
     },
-    ConfigureImages: function(){
+    ConfigureImages: function(image_epd_mode = 1, image_codes){
         var downlink_message = "";
+        downlink_message += "B2";
+        if (image_epd_mode < 0 || image_epd_mode > 2){
+            console.log("invalid epd mode");
+        }
+        else{
+            //donwlink_message += "0"
+            downlink_message += pad_with_zeroes(2,image_epd_mode.toString(16));
+        }
+
+        if (image_epd_mode != 0){
+            downlink_message += pad_with_zeroes(2,image_codes.length.toString(16));
+            image_codes.forEach(function(item, index, array) {
+                downlink_message += pad_with_zeroes(4,Number(item).toString(16));
+            })
+            //image_codes.forEach(element => downlink_message += pad_with_zeroes(4,element.toString(16)));
+        }
+        console.log(downlink_message);
         return downlink_message;
     },
-    ConfigureText: function(){
+    ConfigureText: function(user_text_x_pos = 8, user_text_y_pos = 8, user_text_font_size = 24, user_text_state = 0, user_text_chars){
         var downlink_message = "";
+        /*ser_text_params = True
+        user_text_x_posv   ->   0... 199
+        user_text_y_pos   ->   0... 199
+        user_text_font_size   ->   8, 12, 16, 20, 24
+        user_text_state   ->   0 (0°), 1 (0° inverted), 2 (90°), 3 (90° inverted), 4 (180°), 5 (180° inverted), 6 (270°), 7 (270° inverted)*/
+        //user_text_chars = "123\nABC"
+
+        console.log("generating text message for oxobutton");
+        downlink_message += "B3";
+        if (user_text_x_pos < 0 || user_text_x_pos > 199){
+            console.log("invalid x position");
+        }
+        else{
+            //donwlink_message += "0"
+
+            downlink_message += pad_with_zeroes(2,user_text_x_pos.toString(16));
+        }
+
+        if (user_text_y_pos < 0 || user_text_y_pos > 199){
+            console.log("invalid y position");
+        }
+        else{
+            //donwlink_message += "0"
+            downlink_message += pad_with_zeroes(2,user_text_y_pos.toString(16));
+        }
+
+        if (user_text_font_size < 8 || user_text_font_size > 24){
+            console.log("invalid font size");
+        }
+        else{
+            //donwlink_message += "0"
+            downlink_message += pad_with_zeroes(2,user_text_font_size.toString(16));
+        }
+
+        if (user_text_state < 0 || user_text_state > 7){
+            console.log("invalid text state");
+        }
+        else{
+            //donwlink_message += "0"
+            downlink_message += pad_with_zeroes(2,user_text_state.toString(16));
+        }
+        downlink_message += pad_with_zeroes(2,user_text_chars.length.toString(16));
+        //console.log("user text chars:" + user_text_chars);
+
+        for (var i = 0; i < user_text_chars.length; i++) {
+            downlink_message += pad_with_zeroes(2,user_text_chars.charCodeAt(i).toString(16));
+        }
+        console.log(downlink_message);
         return downlink_message;
     }
 }
