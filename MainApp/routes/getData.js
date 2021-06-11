@@ -9,6 +9,7 @@ router.route('/').get((req,res)=>{
 })
 
 router.get('/EUI/:EUI', getDataCtrl.returnAllMessagesWithEUI);
+router.get('/sensors/:username', getDataCtrl.returnAllSensorsWithUser);
 
 router.post('/downlink', getDataCtrl.sendDownlinkMessage);
 

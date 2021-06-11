@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const dbURI = 'mongodb+srv://readWrite:rKsnW2pPLafbHHz@nodeloraapp.rguzt.mongodb.net/diplomskiRadJelenic?retryWrites=true&w=majority';
+const dotenv = require('dotenv');
+dotenv.config();
+const dbURI = process.env.DBLINK;
 const Sensor = require('../models/sensor');
 const User = require('../models/user');
 const UplinkMessage = require('../models/uplinkMessage');
@@ -18,6 +20,29 @@ module.exports = {
                     { useNewUrlParser: true, useUnifiedTopology: true },
                     async function(err, db){
                         const result = await UplinkMessage.find({EUI: EUI}).then((result) => {
+                            console.log('result of query');
+                            console.log(result);
+                            return (result);
+                        }).catch((err) => {
+                            console.log(err)
+                            reject(err);
+                        });
+                        resolve(result);
+                });
+            })
+        }
+        catch (e){
+            console.log(e);
+        }
+    },
+
+    returnAllSensorsWithUser: function(username){
+        try{
+            return new Promise((resolve, reject) => {
+                mongoose.connect(dbURI,
+                    { useNewUrlParser: true, useUnifiedTopology: true },
+                    async function(err, db){
+                        const result = await Sensor.find({"user.username": username}).then((result) => {
                             console.log('result of query');
                             console.log(result);
                             return (result);
@@ -61,7 +86,7 @@ module.exports = {
                                 port: port,
                                 confirmed: false,
                                 data: msg,
-                                appid: "BE7A21DF"
+                                appid: process.env.APPID
                             })
                         }
                         downlinkMessage.save().then((result) => {
@@ -76,7 +101,7 @@ module.exports = {
                                 headers:headers,
                                 body: JSON.stringify(downlinkMessage)},
                                 (err, response, body) => {
-                                console.log(err, body, response);
+                                //console.log(err, body, response);
                                 if (err) {
                                     reject(err);
                                 } else{
@@ -85,7 +110,7 @@ module.exports = {
                             })
                             resolve(result);
                         }).catch((err) => {
-                            console.log(downlinkMessage);
+                            //console.log(downlinkMessage);
                             console.log('something went wrong downlinkMessage');
                             console.log(err);
                             reject(err);

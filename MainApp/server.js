@@ -1,10 +1,12 @@
 const express = require('express');
 //const bodyParser = require('body-parser');
-require('dotenv').config();
+//require('dotenv').config();
+const dotenv = require('dotenv');
+dotenv.config();
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const port = /*process.env.SERVER_PORT ||*/ 4000;
-const dbURI = 'mongodb+srv://readWrite:<rKsnW2pPLafbHHz>@nodeloraapp.rguzt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const port = process.env.SERVER_PORT /*|| 4000*/;
+//const dbURI = 'mongodb+srv://readWrite:<rKsnW2pPLafbHHz>@nodeloraapp.rguzt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 const {json, urlencoded} = express;
 
 
@@ -28,6 +30,7 @@ app.get('/testJWT', authenticateToken, (req, res) => {
 
 app.listen(port, () => {
     console.info('server started on port: ' + port);
+    //console.log(process.env.DBLINK);
 })
 
 //import this function from authService imas kopiju funkcije rip 6:00 kodiranje   min 15

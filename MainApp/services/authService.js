@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
-const dbURI = 'mongodb+srv://readWrite:rKsnW2pPLafbHHz@nodeloraapp.rguzt.mongodb.net/diplomskiRadJelenic?retryWrites=true&w=majority';
+const dotenv = require('dotenv');
+dotenv.config();
+const dbURI = process.env.DBLINK;
 const User = require('../models/user');
 
 const jwt = require('jsonwebtoken');
