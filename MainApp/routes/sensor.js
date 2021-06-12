@@ -1,5 +1,6 @@
 const express = require('express');
 const sensorCtrl = require('../controllers/sensor');
+const tokenService = require('../services/verifyToken');
 
 const router = express.Router();
 module.exports = router;
@@ -15,7 +16,7 @@ router.route('/add-sensor').get((req,res) => {
 });
 
 
-router.post('/add-sensor', sensorCtrl.addSensor);
+router.post('/add-sensor',tokenService.authenticateToken, sensorCtrl.addSensor);
 
 
 module.exports = router;

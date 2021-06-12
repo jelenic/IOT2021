@@ -175,6 +175,7 @@ module.exports = {
                 return 403;
             }
             else{
+                console.log("token valid");
                 req.user = user;
                 next();
             }

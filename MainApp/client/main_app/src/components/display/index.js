@@ -11,7 +11,7 @@ export class Display extends React.Component {
     render(){
         return(
         <div>
-            <h4>{this.state.token}</h4>
+            <h4>displayUplinkMessages</h4>
         </div>
         )
     }

@@ -1,25 +1,45 @@
-import { Login, Register, Display } from './components';
-
+import { Login, Register, Display, DisplaySensors } from './components';
+import React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import './styles/index.css';
 
-function App() {
-  return (
-    <BrowserRouter>
-        <Switch>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/register">
-              <Register />
-            </Route>
-            <Route path="/display">
-              <Display />
-            </Route>
-        </Switch>
-    </BrowserRouter>
-  );
+export default class App extends React.Component {
+  constructor(props) {
+      super(props);
+      const token = localStorage.getItem("currentUser");
+      console.log("token");
+      console.log(token);
+      this.state = {
+          token: token
+      };
+  }
+  render(){
+    return (
+      <BrowserRouter>
+          <Switch>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/register">
+                <Register />
+              </Route>
+              <Route path="/display">
+                {this.state.token === null
+                  ? <Redirect to="/login" />
+                  : <Display />
+                }
+              </Route>
+              <Route path="/displaySensors">
+                {this.state.token === null
+                  ? <Redirect to="/login" />
+                  : <DisplaySensors />
+                }
+              </Route>
+          </Switch>
+      </BrowserRouter>
+    );
+  }
 }
 
-export default App;
+//export default App;

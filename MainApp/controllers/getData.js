@@ -4,7 +4,7 @@ module.exports = {
     returnAllMessagesWithEUI: (req, res) => {
         console.log(req.params.EUI);
         getDataService.returnAllMessagesWithEUI(req.params.EUI).then((data) => {
-            console.log("log ctrl:" + data);
+            //console.log("log ctrl:" + data);
                 res.json({data : data});
             }).catch((err) => {
                 res.json({err : err.message});
@@ -13,7 +13,7 @@ module.exports = {
     returnAllSensorsWithUser:(req, res) => {
         console.log(req.params.username);
         getDataService.returnAllSensorsWithUser(req.params.username).then((data) => {
-            console.log("log ctrl:" + data);
+            //console.log("log ctrl:" + data);
                 res.json({data : data});
             }).catch((err) => {
                 res.json({err : err.message});
@@ -22,7 +22,7 @@ module.exports = {
     sendDownlinkMessage: (req, res) => {
         console.log(req.params.EUI);
         getDataService.sendDownlinkMessage(req.body.EUI, req.body.type, req.body.dataType, req.body.port, req.body.data).then((data) => {
-            console.log("log ctrl:" + data);
+            //console.log("log ctrl:" + data);
                 res.json({data : data});
             }).catch((err) => {
                 res.json({err : err.message});

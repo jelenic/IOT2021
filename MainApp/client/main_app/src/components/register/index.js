@@ -70,7 +70,8 @@ export class Register extends React.Component {
 
     onSubmit = event => {
         event.preventDefault();
-        this.state.token = "token";
+        //this.state.token = "token";
+        this.setState({token: 'token'});
         const { email, password, cpassword, username, token } = this.state;
 
         const requestOptions = {

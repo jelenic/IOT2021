@@ -9,7 +9,7 @@ module.exports = {
             //TO DO data doesn't return what it should check it out
             authService.hashPassword(req.body.password).then((result) => {
                 authService.register(req.body.email, result, req.body.username, req.body.token).then((data) => {
-                    console.log("log ctrl:" + data);
+                    //console.log("log ctrl:" + data);
                     res.json({data : data});
                 }).catch((err) => {
                     res.json({err : err.message});
