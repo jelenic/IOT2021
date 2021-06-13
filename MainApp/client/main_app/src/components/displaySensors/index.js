@@ -7,6 +7,7 @@ export class DisplaySensors extends React.Component {
         super(props);
         this.state = {
             token: localStorage.getItem("JWT"),
+            username: localStorage.getItem("username"),
             sensors : []
             /*sensors: [
                 {
@@ -33,8 +34,10 @@ export class DisplaySensors extends React.Component {
             method: 'GET',
             headers: { 'Authorization': 'Bearer ' + localStorage.getItem("JWT") }
         };
+        var urlReq = "http://127.0.0.1:4000/api/getData/sensors/" + localStorage.getItem("username");
+        //console.log(urlReq);
 
-        fetch("http://127.0.0.1:4000/api/getData/sensors/a", requestOptions)
+        fetch(urlReq, requestOptions)
             .then(res =>
                 res.json())
                 //console.log(res.json().data))
@@ -49,7 +52,7 @@ export class DisplaySensors extends React.Component {
             console.log('empty');
             return (
                 <div>
-                    <h4>displaySensors</h4>
+                    <h4>Loading display sensors</h4>
                 </div>
                 )
         }

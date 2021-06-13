@@ -147,17 +147,20 @@ module.exports = {
             mongoose.connect(dbURI, 
                 { useNewUrlParser: true, useUnifiedTopology: true }, 
                 async function(err, db){
+                    //console.log(email);
                     const user = await User.findOne({email: email}).catch((err) => console.log(err));
-                    if (bcrypt.compare(password, user.password)){
+                    //console.log(bcrypt.compare(password, user.password));
+                    //console.log(user)
+                    if (await bcrypt.compare(password, user.password)){
                         //generate jwt
                         console.log('generating jwt');
                         let accessToken = generateAccesToken({token: user.token})
-                        resolve ({accessToken: accessToken});
+                        resolve ({auth: true, accessToken: accessToken, username: user.username, email: user.email});
                         //return ({msg: 'generating jwt'});
                     }
                     else{
                         console.log('passwords dont match');
-                        resolve ('passwords dont match');
+                        resolve ({auth: false});
                         //return ({msg: 'passwords dont match'});
                     }
             })

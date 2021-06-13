@@ -66,7 +66,11 @@ export class Login extends React.Component {
             .then(res => res.json())
             .then(res => {
                 localStorage.setItem("JWT", res.data.accessToken);
-                window.location.assign('/display');
+                localStorage.setItem("username", res.data.username);
+                //console.log(res.data);
+                if (res.data.auth){
+                    window.location.assign('/displaySensors');
+                }
             })
             .catch();
     }

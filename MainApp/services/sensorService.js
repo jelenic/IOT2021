@@ -20,6 +20,7 @@ module.exports = {
                             console.log(err)
                             reject(err);
                         });
+                        console.log(email);
                         const user = await User.findOne({email: email}).then((result) => {
                             console.log('user:' + result);
                             //resolve(result);
