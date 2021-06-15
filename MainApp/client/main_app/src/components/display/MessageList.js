@@ -11,7 +11,7 @@ const MessageList = ({ messages }) =>
         </li>
         {messages.map(message =>
             <MessageListItem
-                key={message.EUI}
+                key={message.ts}
                 message={message}
             />
         )}

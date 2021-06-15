@@ -1,4 +1,4 @@
-import { Login, Register, Display, DisplaySensors, AddSensor } from './components';
+import { Login, Register, Display, DisplaySensors, AddSensor, MessageDetails } from './components';
 import React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
@@ -34,6 +34,12 @@ export default class App extends React.Component {
                 {this.state.token === null
                   ? <Redirect to="/login" />
                   : <DisplaySensors />
+                }
+              </Route>
+              <Route path="/details">
+                {this.state.token === null
+                    ? <Redirect to="/login" />
+                    : <MessageDetails />
                 }
               </Route>
               <Route path="/addSensor">
