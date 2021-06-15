@@ -7,7 +7,7 @@ import './styles/index.css';
 export default class App extends React.Component {
   constructor(props) {
       super(props);
-      const token = localStorage.getItem("currentUser");
+      const token = localStorage.getItem("JWT");
       console.log("token");
       console.log(token);
       this.state = {

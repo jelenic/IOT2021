@@ -9,23 +9,6 @@ export class DisplaySensors extends React.Component {
             token: localStorage.getItem("JWT"),
             username: localStorage.getItem("username"),
             sensors : []
-            /*sensors: [
-                {
-                    EUI: "A81758FFFE04D146",
-                    type: "elsys",
-                    desc: "elsys desc"
-                },
-                {
-                    EUI: "C81758FFFE04D146",
-                    type: "elsys",
-                    desc: "elsys desc"
-                },
-                {
-                    EUI: "R81758FFFE04D146",
-                    type: "elsys",
-                    desc: "elsys desc"
-                }
-            ]*/
         }
     }
     componentDidMount(){

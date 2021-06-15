@@ -1,7 +1,13 @@
 import React from 'react';
 
-const SensorListItem = ({ sensor }) =>
-    <li className="table-row">
+const SensorListItem = ({ sensor }) =>{
+
+    const onClick = () =>{
+        window.location.assign(`/display`);
+        localStorage.setItem("EUI", sensor.EUI);
+    }
+    return(
+    <li className="table-row" onClick = {onClick}>
         <div className="list-col">
             {sensor.EUI}
         </div>
@@ -11,6 +17,7 @@ const SensorListItem = ({ sensor }) =>
         <div className="list-col">
              {sensor.desc}
         </div>
-    </li>;
+    </li>);
+}
 
 export {SensorListItem}
