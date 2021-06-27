@@ -5,6 +5,11 @@ const SensorListItem = ({ sensor }) =>{
     const onClick = () =>{
         window.location.assign(`/display`);
         localStorage.setItem("EUI", sensor.EUI);
+        localStorage.setItem("sensor", JSON.stringify(sensor));
+        //console.log(sensor);
+        if (sensor.type!== 'undefined' ){
+            localStorage.setItem("type", sensor.type);
+        }
     }
     return(
     <li className="table-row" onClick = {onClick}>

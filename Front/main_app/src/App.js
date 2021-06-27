@@ -1,4 +1,4 @@
-import { Login, Register, Display, DisplaySensors, AddSensor, MessageDetails } from './components';
+import { Login, Register, Display, DisplaySensors, AddSensor, MessageDetails, Downlink } from './components';
 import React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
@@ -8,8 +8,8 @@ export default class App extends React.Component {
   constructor(props) {
       super(props);
       const token = localStorage.getItem("JWT");
-      console.log("token");
-      console.log(token);
+      //console.log("token");
+      //console.log(token);
       this.state = {
           token: token
       };
@@ -34,6 +34,12 @@ export default class App extends React.Component {
                 {this.state.token === null
                   ? <Redirect to="/login" />
                   : <DisplaySensors />
+                }
+              </Route>
+              <Route path="/downlink">
+              {this.state.token === null
+                  ? <Redirect to="/login" />
+                  : <Downlink />
                 }
               </Route>
               <Route path="/details">

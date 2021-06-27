@@ -20,7 +20,7 @@ module.exports = {
         })
     },
     sendDownlinkMessage: (req, res) => {
-        console.log(req.params.EUI);
+        console.log(req.body.EUI);
         getDataService.sendDownlinkMessage(req.body.EUI, req.body.type, req.body.dataType, req.body.port, req.body.data).then((data) => {
             //console.log("log ctrl:" + data);
                 res.json({data : data});

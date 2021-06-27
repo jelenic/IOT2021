@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const secret = process.env.SECRET;
 
 module.exports = {authenticateToken: function(req, res, next){
     const authHeader = req.headers['authorization'];
@@ -9,7 +10,7 @@ module.exports = {authenticateToken: function(req, res, next){
         return res.sendStatus(401);
     }
 
-    jwt.verify(token, 'nestostabitrebaocitkljuc', (err,user) => {
+    jwt.verify(token, secret, (err,user) => {
         if (err){
             return res.sendStatus(403);
         }

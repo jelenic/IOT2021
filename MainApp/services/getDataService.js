@@ -61,6 +61,12 @@ module.exports = {
 
     sendDownlinkMessage: function(EUI, type, dataType, port, data){
         try{
+            console.log("data sent:");
+            console.log(EUI);
+            console.log(type);
+            console.log(dataType);
+            console.log(port);
+            console.log(data);
             return new Promise((resolve, reject) => {
                 mongoose.connect(dbURI,
                     { useNewUrlParser: true, useUnifiedTopology: true },

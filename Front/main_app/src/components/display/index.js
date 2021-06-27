@@ -1,5 +1,7 @@
 import React from 'react';
 import {MessageList} from './MessageList';
+import Button from 'react-bootstrap/Button';
+import {Link } from "react-router-dom";
 
 
 export class Display extends React.Component {
@@ -11,6 +13,10 @@ export class Display extends React.Component {
             sensors : [],
             messages : []
         }
+
+        //this.setValue = this.setValue.bind(this);
+        this.onClick = this.onClick.bind(this);
+
     }
 
     componentDidMount(){
@@ -30,6 +36,12 @@ export class Display extends React.Component {
             .catch();
     }
 
+    /*setValue = e => {
+        this.setState({ EUI: e.target.getAttribute('value') });
+      };*/
+      onClick = () =>{
+        console.log("test");
+    }
 
     render(){
 
@@ -49,6 +61,10 @@ export class Display extends React.Component {
             console.log(messages)
             return (
                 <div className="smarthome">
+                    <Link to="/downlink" onClick = {this.onClick}><button>
+                        Downlink
+                    </button>
+                    </Link>
                     <MessageList messages={messages} />
                 </div>
                 )
