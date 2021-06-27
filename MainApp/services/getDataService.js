@@ -20,8 +20,8 @@ module.exports = {
                     { useNewUrlParser: true, useUnifiedTopology: true },
                     async function(err, db){
                         const result = await UplinkMessage.find({EUI: EUI}).then((result) => {
-                            console.log('result of query');
-                            console.log(result);
+                            //console.log('result of query');
+                            //console.log(result);
                             return (result);
                         }).catch((err) => {
                             console.log(err)
@@ -61,12 +61,6 @@ module.exports = {
 
     sendDownlinkMessage: function(EUI, type, dataType, port, data){
         try{
-            console.log("data sent:");
-            console.log(EUI);
-            console.log(type);
-            console.log(dataType);
-            console.log(port);
-            console.log(data);
             return new Promise((resolve, reject) => {
                 mongoose.connect(dbURI,
                     { useNewUrlParser: true, useUnifiedTopology: true },
@@ -100,7 +94,7 @@ module.exports = {
                             //mongoose.connection.close();
                             let headers = {
                                 "Content-Type":"application/json",
-                                "Authorization":"Bearer vnoh3wAAAA1ldTEubG9yaW90LmlvCoH9Jt8pL4NSI5MpfkWUjQ=="
+                                "Authorization": process.env.AUTH
                             } 
                             request.post({
                                 url: BASE_URL,

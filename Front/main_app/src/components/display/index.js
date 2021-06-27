@@ -59,15 +59,24 @@ export class Display extends React.Component {
         else{
             const {messages} = this.state;
             console.log(messages)
-            return (
-                <div className="smarthome">
-                    <Link to="/downlink" onClick = {this.onClick}><button>
-                        Downlink
-                    </button>
-                    </Link>
-                    <MessageList messages={messages} />
-                </div>
-                )
+            if (localStorage.getItem("type")==='oxobutton'){
+                return (
+                    <div className="smarthome">
+                        <Link to="/downlink" onClick = {this.onClick}><button>
+                            Downlink
+                        </button>
+                        </Link>
+                        <MessageList messages={messages} />
+                    </div>
+                    )
+            }
+            else{
+                return (
+                    <div className="smarthome">
+                        <MessageList messages={messages} />
+                    </div>
+                    )
+            }
         }
     }
 }
